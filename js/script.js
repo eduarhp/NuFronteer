@@ -62,7 +62,7 @@ $(document).ready(function() {
 
   $('#NavigationMain > nav > ul > .menu-item-has-children').children('a').append('<span class="caret"></span>');
 
-  $('#NavigationMain > nav > ul > .menu-item-has-children > ul > .menu-item-has-children').children('a').append('<span class="caret"></span>');
+  $('#NavigationMain > nav > ul > .menu-item-has-children > ul > .menu-item-has-children').children('a').append('<span class="caret-right"></span>');
 
 
   $('.NavigationMain > nav > ul > .menu-item-has-children').hover(function(){
@@ -102,32 +102,6 @@ $(document).ready(function() {
     }
   });
 
-  // $('.MobileMenu > nav > ul > .menu-item-has-children > a').on('click', function(event){
-  //   event.preventDefault();
-
-  //   if( $(this).attr('data-show') == 'show' ){
-  //     $(this).next().css({"display":"none"});
-  //     $(this).attr('data-show',''); 
-  //   }else{
-  //     $(this).attr('data-show','show'); 
-  //     $(this).next().css({"display":"block"});
-  //   }  
-    
-  // });
-
-  // $('.MobileMenu > nav > ul > li > ul > .menu-item-has-children > a').on('click', function(event){
-  //   event.preventDefault();
-
-  //   if( $(this).attr('data-show') == 'show' ){
-  //     $(this).next().css({"display":"none"});
-  //     $(this).attr('data-show',''); 
-  //   }else{
-  //     $(this).attr('data-show','show'); 
-  //     $(this).next().css({"display":"block"});
-  //   }  
-    
-  // });
-
 
   var currentCommment = window.location.href;
 
@@ -145,5 +119,29 @@ $(document).ready(function() {
     $('#community').addClass('active');
   }
 
+
+  if(currentCommment.indexOf('#community')!= -1){
+    $('ul.nav-tabs li').removeClass('active');
+    $('.tab-pane').removeClass('active');
+    $('ul.nav-tabs li:eq(1)').addClass('active');
+    //$('#professional').removeClass('active');
+    $('#community').addClass('active');
+  }
+
+  if(currentCommment.indexOf('#diy')!= -1){
+    $('ul.nav-tabs li').removeClass('active');
+    $('.tab-pane').removeClass('active');
+    $('ul.nav-tabs li:eq(2)').addClass('active');
+    //$('#professional').removeClass('active');
+    $('#diy').addClass('active');
+  }
+
+  if(currentCommment.indexOf('#video')!= -1){
+    $('ul.nav-tabs li').removeClass('active');
+    $('.tab-pane').removeClass('active');
+    $('ul.nav-tabs li:eq(0)').addClass('active');
+    //$('#professional').removeClass('active');
+    $('#video').addClass('active');
+  }
 
 });

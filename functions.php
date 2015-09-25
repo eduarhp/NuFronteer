@@ -125,8 +125,6 @@ function sa_load_js() {
     wp_register_script('quicksand', get_template_directory_uri() . '/js/jquery.quicksand.js');
     wp_register_script('prettyPhoto', get_template_directory_uri() . '/js/jquery.prettyPhoto.js');
     wp_register_script('validation', 'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.8.1/jquery.validate.min.js');
-    wp_register_script('contact', get_template_directory_uri() . '/js/contact-form.js');
-    wp_register_script('functions', get_template_directory_uri() . '/js/functions.js');
     wp_enqueue_script('jquery_mobile_detect');
     wp_enqueue_script('nivo');
     wp_enqueue_script('slides');
@@ -135,8 +133,6 @@ function sa_load_js() {
     wp_enqueue_script('quicksand');
     wp_enqueue_script('prettyPhoto');
     wp_enqueue_script('validation');
-    wp_enqueue_script('contact');
-    wp_enqueue_script('functions');
 }
 
 add_action('init', 'sa_load_js');
@@ -191,8 +187,8 @@ function saviour_formatter($content) {
 }
 
 // Remove the 2 main auto-formatters
-remove_filter('the_content', 'wpautop');
-remove_filter('the_content', 'wptexturize');
+//remove_filter('the_content', 'wpautop');
+//remove_filter('the_content', 'wptexturize');
 
 // Before displaying for viewing, apply this function
 add_filter('the_content', 'saviour_formatter', 99);
@@ -827,9 +823,9 @@ function post_videos_content( $post ) {
   wp_nonce_field( plugin_basename( __FILE__ ), 'post_videos_box_content_nonce' );
 ?>
   <label for="Video URL"></label>
-  <input type="text" id="news_video_1" name="news_video_1" placeholder="Video URL" value="<?php echo $news_video_1; ?>" />
-  <input type="text" id="news_video_2" name="news_video_2" placeholder="Video URL" value="<?php echo $news_video_2; ?>" />
-  <input type="text" id="news_video_3" name="news_video_3" placeholder="Video URL" value="<?php echo $news_video_3; ?>" />
+  <input type="text" id="news_video_1" name="news_video_1" placeholder="Enter video Embed Code" value='<?php echo $news_video_1; ?>' />
+  <input type="text" id="news_video_2" name="news_video_2" placeholder="Enter video Embed Code" value='<?php echo $news_video_2; ?>' />
+  <input type="text" id="news_video_3" name="news_video_3" placeholder="Enter video Embed Code" value='<?php echo $news_video_3; ?>' />
 
 <?php
 
@@ -1230,10 +1226,10 @@ function review_render_recommended_attachment_box($post) {
     echo '<p></p>';
     if(is_numeric($existing_image_id)) {
 
-        echo '<div>';
+        echo '<div style="width: 200px">';
             $arr_existing_image = wp_get_attachment_image_src($existing_image_id, 'large');
             $existing_image_url = $arr_existing_image[0];
-            echo '<img src="' . $existing_image_url . '" />';
+            echo '<img style="width: 100%" src="' . $existing_image_url . '" />';
         echo '</div>';
 
     }
@@ -1250,10 +1246,10 @@ function review_render_recommended_attachment_box($post) {
     echo '<p></p>';
     if(is_numeric($existing_image_id2)) {
 
-        echo '<div>';
+        echo '<div style="width: 200px">';
             $arr_existing_image2 = wp_get_attachment_image_src($existing_image_id2, 'large');
             $existing_image_url2 = $arr_existing_image2[0];
-            echo '<img src="' . $existing_image_url2 . '" />';
+            echo '<img style="width: 100%" src="' . $existing_image_url2 . '" />';
         echo '</div>';
 
     }
@@ -1271,10 +1267,10 @@ function review_render_recommended_attachment_box($post) {
     echo '<p></p>';
     if(is_numeric($existing_image_id3)) {
 
-        echo '<div>';
+        echo '<div style="width: 200px">';
             $arr_existing_image3 = wp_get_attachment_image_src($existing_image_id3, 'large');
             $existing_image_url3 = $arr_existing_image3[0];
-            echo '<img src="' . $existing_image_url3 . '" />';
+            echo '<img style="width: 100%" src="' . $existing_image_url3 . '" />';
         echo '</div>';
 
     }
@@ -1405,7 +1401,7 @@ function review_update_post($post_id, $post) {
                         $uploaded_file2 = wp_handle_upload($_FILES['review_product2'], $upload_overrides2);
 
                         // If the wp_handle_upload call returned a local path for the image
-                        if(isset($uploaded_file['file'])) {
+                        if(isset($uploaded_file2['file'])) {
 
                             // The wp_insert_attachment function needs the literal system path, which was passed back from wp_handle_upload
                             $file_name_and_location2 = $uploaded_file2['file'];

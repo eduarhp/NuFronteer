@@ -5,7 +5,7 @@ Template Name: Tpl Homepage
 ?>
 <?php get_header(); ?>
 <?php
-  $type = 'post';
+  $type = array('post');
   //$per_page = of_get_option('blog_items_per_page');
   //$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
   $args=array(

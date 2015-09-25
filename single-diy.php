@@ -13,8 +13,8 @@
         <!-- OPEN .article-wrap -->
         <article class="article-wrap main-column" id="<?php the_ID(); ?>" <?php post_class(); ?>>
 
-          <!-- Nav tabs -->
-          <ul id="review-tabs" class="nav nav-tabs" role="tablist">
+          <!-- Desktop Nav tabs -->
+          <ul class="nav nav-tabs desktop" role="tablist">
             <li role="presentation"><a href="#video" aria-controls="video" role="tab" data-toggle="tab">DIY Video</a></li>
             <li role="presentation"><a href="#community" aria-controls="community" role="tab" data-toggle="tab">Community Opinion</a></li>
             <li role="presentation" class="active"><a href="#advice" aria-controls="advice" role="tab" data-toggle="tab">DIY Advice</a></li>
@@ -29,7 +29,7 @@
               <?php
                     $src = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), array( 5600,1000 ), false, '' );
               ?>
-              <div class="single-main-post-image" style="background: url(<?php echo $src[0]; ?> ) !important;">
+              <div class="single-main-post-image" style="background-image: url(<?php echo $src[0]; ?> ) !important; background-size: cover">
                 <?php foreach((get_the_category()) as $category) { $category->cat_name . ' '; } ?>
                 <?php
 
@@ -58,6 +58,14 @@
                 </div>
               </div>
             <?php } ?>
+            
+            <!-- Mobile Nav tabs -->
+            <ul class="nav nav-tabs mobile" role="tablist">
+              <li role="presentation" class="active"><a href="#advice" aria-controls="advice" role="tab" data-toggle="tab">DIY Advice</a></li>
+              <li role="presentation"><a href="#community" aria-controls="community" role="tab" data-toggle="tab">Community Opinion</a></li>
+              <li role="presentation"><a href="#video" aria-controls="video" role="tab" data-toggle="tab">DIY Video</a></li>
+            </ul>
+            
             <div role="tabpanel" class="tab-pane active" id="advice">
               <div class="rating-wrapper clearfix">
                 <?php $difficulty_level = get_post_meta($post->ID, 'difficulty_level', true); ?>
@@ -97,19 +105,38 @@
 
               <div id="comment-area" class="clearfix">
 
-                <?php
+                <?php 
 
-                $type = 'diy';
-                $args=array(
-                  'post_type' => $type,
-                  'post_status' => 'publish',
-                  'category' => $category_post,
-                  'posts_per_page' => -1,
-                  'caller_get_posts'=> 1);
+                  $global_id = $post->ID;
 
-                $my_query = null;
-                $my_query = new WP_Query($args);
-                if( $my_query->have_posts() ) {
+                  $args_cat = array(
+                    'child_of'=>get_query_var('cat'),
+                  );
+
+                  $category = get_the_category($args_cat);
+
+                  $categories = array();
+                  if (empty($category)) {
+                    $categories[] = get_query_var('cat');
+                  }else{
+                    foreach ($category as $value) {
+                      $categories[] = $value->term_id;
+                    }
+                  } 
+                  $type = array('post', 'diy', 'review' );
+
+                    $args=array(
+                      'limit' => 24,
+                      'posts_per_page'=> 24,
+                      'post_type' => $type,
+                      'category__in' => $categories,
+                      'post_status' => 'publish',
+                      );
+                    $wp_query = NULL;
+                    $wp_query = new WP_Query();
+                    $wp_query->query($args);
+
+                if( $wp_query->have_posts() ) {
                   while ( $my_query->have_posts() ) : $my_query->the_post(); ?>
                     <?php 
                       $category_var = get_the_category();
@@ -147,224 +174,141 @@
           </div>
 
 
+          <?php 
+            $shortCode = get_post_meta($global_id, 'review_shortCode', true);
+            $product_1 = get_post_meta($global_id, '_review_product1_name', true);
+            $product_2 = get_post_meta($global_id, '_review_product2_name', true);
+          ?>
+
+          <?php if($shortCode!="" && $product_1!="" && $product_2!="") { ?>
+          
           <div class="box_products_compare">
             <div class="tab_wrapper">
               <!-- Nav tabs -->
               <ul class="nav nav-tabs tabs-bottom" role="tablist">
-                <li role="presentation"><a href="#productline" aria-controls="home" role="tab" data-toggle="tab"><span class="flaticon-shopping122"></span>Product Line</a></li>
-                <li role="presentation" class="active"><a href="#compare" aria-controls="profile" role="tab" data-toggle="tab"><span class="flaticon-balance14"></span>Compare</a></li>
+                <?php 
+                  if($product_1!="" && $product_2!=""){ ?>
+
+                  <li role="presentation" class="active"><a href="#productline" aria-controls="home" role="tab" data-toggle="tab"><span class="flaticon-shopping122"></span>Product Line</a></li>
+
+                <?php }
+                ?>
+                <?php 
+                  if($shortCode!=""){ ?>
+
+                  <li role="presentation"><a href="#compare" aria-controls="profile" role="tab" data-toggle="tab"><span class="flaticon-balance14"></span>Compare</a></li>
+
+                <?php }
+                ?>
               </ul>
 
               <!-- Tab panes -->
               <div class="tab-content tab-content-bottom">
-                <div role="tabpanel" class="tab-pane" id="productline">
-                  <h2>Recommended Belkin WeMo® Products</h2>
-                  <h4>Switches</h4>
-                  <div class="carrousel">
-                    <article class="product">
-                      <figure>
-                        <img src="http://www.bricolajehogar.net/images/interruptores-unipolares-conexion.jpg" alt="" />
-                      </figure>
-                      <div class="product_detail">
-                        <div class="product_name">
-                          WeMo® Insight Switch
+                <?php 
+                  if($product_1!="" && $product_2!=""){ ?>
+                  
+                  <div role="tabpanel" class="tab-pane active" id="productline">              
+                    <div class="carrousel carro-products"> 
+                      <!-- Product 1 -->
+                      <article class="product">
+                        <?php 
+                          $existing_image_id = get_post_meta($global_id,'_review_attached_image1', true);
+                          $arr_existing_image = wp_get_attachment_image_src($existing_image_id, 'large');
+                          $existing_image_url = $arr_existing_image[0];
+                        ?>
+                        <figure style="background-image: url(<?php echo $existing_image_url; ?>);">
+                        </figure>
+                        <div class="product_detail">
+                          <div class="product_name">
+                            <a href="<?php echo get_post_meta($global_id, '_review_product1_link', true); ?>" target="_blank"><?php echo get_post_meta($global_id, '_review_product1_name', true); ?></a>
+                          </div>
+                          <!--<div class="product_code">
+                            F7C020fc
+                          </div>-->
+                          <div class="product_price">
+                            <?php echo get_post_meta($global_id, '_review_product1_price', true); ?>
+                          </div>
+                          <div class="product_buy">
+                            <a href="<?php echo get_post_meta($global_id, '_review_product1_link', true); ?>" target="_blank">Buy now</a>
+                          </div>
                         </div>
-                        <div class="product_code">
-                          F7C020fc
-                        </div>
-                        <div class="product_price">
-                          $55.99
-                        </div>
-                        <div class="product_buy">
-                          <a href="#">Buy now</a>
-                        </div>
-                      </div>
-                    </article>
+                      </article>
 
-                    <article class="product">
-                      <figure>
-                        <img src="http://www.bricolajehogar.net/images/interruptores-unipolares-conexion.jpg" alt="" />
-                      </figure>
-                      <div class="product_detail">
-                        <div class="product_name">
-                          WeMo® Insight Switch
+                      <!-- Product 2 -->
+                      <article class="product">
+                        <?php 
+                          $existing_image_id = get_post_meta($global_id,'_review_attached_image2', true);
+                          $arr_existing_image = wp_get_attachment_image_src($existing_image_id, 'large');
+                          $existing_image_url = $arr_existing_image[0];
+                        ?>
+                        <figure style="background-image: url(<?php echo $existing_image_url; ?>);">
+                        </figure>
+                        <div class="product_detail">
+                          <div class="product_name">
+                            <a href="<?php echo get_post_meta($global_id, '_review_product2_link', true); ?>" target="_blank"><?php echo get_post_meta($global_id, '_review_product2_name', true); ?></a>
+                          </div>
+                          <!--<div class="product_code">
+                            F7C020fc
+                          </div>-->
+                          <div class="product_price">
+                            <?php echo get_post_meta($global_id, '_review_product2_price', true); ?>
+                          </div>
+                          <div class="product_buy">
+                            <a href="<?php echo get_post_meta($global_id->ID, '_review_product2_link', true); ?>" target="_blank">Buy now</a>
+                          </div>
                         </div>
-                        <div class="product_code">
-                          F7C020fc
-                        </div>
-                        <div class="product_price">
-                          $55.99
-                        </div>
-                        <div class="product_buy">
-                          <a href="#">Buy now</a>
-                        </div>
-                      </div>
-                    </article>
-                  </div><!-- end carrousel -->
-                  <h4>Controllers</h4>
-                  <div class="carrousel">
-                    <article class="product">
-                      <figure>
-                        <img src="http://www.bricolajehogar.net/images/interruptores-unipolares-conexion.jpg" alt="" />
-                      </figure>
-                      <div class="product_detail">
-                        <div class="product_name">
-                          WeMo® Insight Switch
-                        </div>
-                        <div class="product_code">
-                          F7C020fc
-                        </div>
-                        <div class="product_price">
-                          $55.99
-                        </div>
-                        <div class="product_buy">
-                          <a href="#">Buy now</a>
-                        </div>
-                      </div>
-                    </article>
+                      </article>
 
-                    <article class="product">
-                      <figure>
-                        <img src="http://www.bricolajehogar.net/images/interruptores-unipolares-conexion.jpg" alt="" />
-                      </figure>
-                      <div class="product_detail">
-                        <div class="product_name">
-                          WeMo® Insight Switch
+                      <!-- Product 3 -->
+                      <article class="product">
+                        <?php 
+                          $existing_image_id = get_post_meta($global_id,'_review_attached_image3', true);
+                          $arr_existing_image = wp_get_attachment_image_src($existing_image_id, 'large');
+                          $existing_image_url = $arr_existing_image[0];
+                        ?>
+                        <figure style="background-image: url(<?php echo $existing_image_url; ?>);">
+                        </figure>
+                        <div class="product_detail">
+                          <div class="product_name">
+                            <a href="<?php echo get_post_meta($global_id, '_review_product3_link', true); ?>" target="_blank"><?php echo get_post_meta($global_id, '_review_product3_name', true); ?></a>
+                          </div>
+                          <!--<div class="product_code">
+                            F7C020fc
+                          </div>-->
+                          <div class="product_price">
+                            <?php echo get_post_meta($global_id, '_review_product3_price', true); ?>
+                          </div>
+                          <div class="product_buy">
+                            <a href="<?php echo get_post_meta($global_id, '_review_product3_link', true); ?>" target="_blank">Buy now</a>
+                          </div>
                         </div>
-                        <div class="product_code">
-                          F7C020fc
-                        </div>
-                        <div class="product_price">
-                          $55.99
-                        </div>
-                        <div class="product_buy">
-                          <a href="#">Buy now</a>
-                        </div>
-                      </div>
-                    </article>
-                  </div><!-- end carrousel -->
-                  <h4>Connected Devices</h4>
-                  <div class="carrousel">
-                    <article class="product">
-                      <figure>
-                        <img src="http://www.bricolajehogar.net/images/interruptores-unipolares-conexion.jpg" alt="" />
-                      </figure>
-                      <div class="product_detail">
-                        <div class="product_name">
-                          WeMo® Insight Switch
-                        </div>
-                        <div class="product_code">
-                          F7C020fc
-                        </div>
-                        <div class="product_price">
-                          $55.99
-                        </div>
-                        <div class="product_buy">
-                          <a href="#">Buy now</a>
-                        </div>
-                      </div>
-                    </article>
+                      </article>
+                      
+                    </div>
+                  </div><!-- end productline -->         
 
-                    <article class="product">
-                      <figure>
-                        <img src="http://www.bricolajehogar.net/images/interruptores-unipolares-conexion.jpg" alt="" />
-                      </figure>
-                      <div class="product_detail">
-                        <div class="product_name">
-                          WeMo® Insight Switch
-                        </div>
-                        <div class="product_code">
-                          F7C020fc
-                        </div>
-                        <div class="product_price">
-                          $55.99
-                        </div>
-                        <div class="product_buy">
-                          <a href="#">Buy now</a>
-                        </div>
-                      </div>
-                    </article>
-                  </div><!-- end carrousel -->
+                <?php }
+                ?>
 
-                </div><!-- end productline -->
-                <div role="tabpanel" class="tab-pane active" id="compare">
-                  <div class="table_content">
-                    <table>
-                    <tbody>
-                      <tr>
-                        <td>Product</td>
-                        <td><a href=""><img src="http://www.nufronteer.com/images/external/control4.jpg" alt=""></a></td>
-                        <td><a href=""><img src="http://www.nufronteer.com/images/external/control4.jpg" alt=""></a></td>
-                        <td><a href=""><img src="http://www.nufronteer.com/images/external/control4.jpg" alt=""></a></td>
-                        <td><a href=""><img src="http://www.nufronteer.com/images/external/control4.jpg" alt=""></a></td>
-                        <td><a href=""><img src="http://www.nufronteer.com/images/external/control4.jpg" alt=""></a></td>
-                        <td><a href=""><img src="http://www.nufronteer.com/images/external/control4.jpg" alt=""></a></td>
-                        <td><a href=""><img src="http://www.nufronteer.com/images/external/control4.jpg" alt=""></a></td>
-                        <td><a href=""><img src="http://www.nufronteer.com/images/external/control4.jpg" alt=""></a></td>
-                        <td><a href=""><img src="http://www.nufronteer.com/images/external/control4.jpg" alt=""></a></td>
-                      </tr>
-                      <tr>
-                        <td>Price and Devices:</td>
-                        <td>$50 (motion sensor) to $100 (power strip)</td>
-                        <td>$50 (motion sensor) to $100 (power strip)</td>
-                        <td>$50 (motion sensor) to $100 (power strip)</td>
-                        <td>$50 (motion sensor) to $100 (power strip)</td>
-                        <td>$50 (motion sensor) to $100 (power strip)</td>
-                        <td>$50 (motion sensor) to $100 (power strip)</td>
-                        <td>$50 (motion sensor) to $100 (power strip)</td>
-                        <td>$50 (motion sensor) to $100 (power strip)</td>
-                        <td>$50 (motion sensor) to $100 (power strip)</td>
-                      </tr>
 
-                      <tr>
-                        <td>Warrantly:</td>
-                        <td>1-year</td>
-                        <td>1-year</td>
-                        <td>1-year</td>
-                        <td>1-year</td>
-                        <td>1-year</td>
-                        <td>1-year</td>
-                        <td>1-year</td>
-                        <td>1-year</td>
-                        <td>1-year</td>
-                      </tr>
+                <?php 
+                  if($shortCode!=""){ ?>
 
-                      <tr>
-                        <td colspan="6">Available Products</td>
-                      </tr>
-
-                      <tr>
-                        <td>Security:</td>
-                        <td>Y</td>
-                        <td>Y</td>
-                        <td>Y</td>
-                        <td>Y</td>
-                        <td>Y</td>
-                        <td>Y</td>
-                        <td>Y</td>
-                        <td>Y</td>
-                        <td>Y</td>
-                      </tr>
-
-                      <tr>
-                        <td>Lighting</td>
-                        <td>Y</td>
-                        <td>Y</td>
-                        <td>Y</td>
-                        <td>Y</td>
-                        <td>Y</td>
-                        <td>Y</td>
-                        <td>Y</td>
-                        <td>Y</td>
-                        <td>Y</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div role="tabpanel" class="tab-pane" id="compare">
+                    <div class="table_content">
+                    <?php echo do_shortcode($shortCode); ?>
+                    </div>
                   </div>
-                </div>
+
+                <?php }
+                ?>
               </div>
             </div>
           </div>
+            
+          <?php } ?>
+
+
           <!-- OPEN .navigation .page-navigation -->
           <nav class="navigation page-navigation">
             <ul class="pager">

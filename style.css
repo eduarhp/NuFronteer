@@ -173,6 +173,22 @@ html, body {
 .bg-grey-dark {
   background-color: #555;
 }
+
+/* Glyphicons & Carets */
+
+.caret-right { 
+  width: 0;
+  height: 0;
+  display: inline-block;
+  vertical-align: middle;
+  color: #428bca;
+  border-bottom: 4px solid transparent;
+  border-top: 4px solid transparent;
+  border-left: 4px solid;
+  margin-top: 5px;
+  float: right;
+}
+
 /* SHARED
    ================================================== */
 .logo-nufronteer, .logo-nufronteer-vertical {
@@ -303,6 +319,7 @@ html, body {
   margin: 0;
   padding: 0;
   background-color: #ebebeb;
+  z-index: 500;
 }
 
 #NavigationMain > nav > ul > li > ul > li{
@@ -316,6 +333,10 @@ html, body {
   display: block;
   border-bottom: 1px dashed #999;
   padding: 8px 0;
+}
+
+#NavigationMain > nav > ul > li > ul > li > a:hover .caret-right { 
+  color: #2a6496;
 }
 
 #NavigationMain > nav > ul > li > ul > li > ul{
@@ -429,11 +450,17 @@ footer {
   color: #EEE;
   padding-top: 20px;
 }
+
+footer .row > div {
+  margin-bottom: 15px;
+}
+
 footer h5 {
   font-size: 1.2em;
   color: #008bfc;
   margin: 0 0 10px 0;
 }
+
 footer ul {
   margin: 0;
   padding: 0;
@@ -454,7 +481,7 @@ footer p {
   margin: 0 0 3px 0;
 }
 footer .text-center {
-  padding: 15px 0;
+  padding-bottom: 15px;
 }
 /* Social Icons */
 footer ul.social-icons {
@@ -1068,6 +1095,7 @@ section li.tweet .twitter-date {
 .post .entry-content h3 {
   color: #008bfc;
   margin: 0 0 5px 0;
+  padding-right: 35px;
 }
 .post .entry-content .excerpt {
   margin: 10px 0;
@@ -1153,9 +1181,17 @@ section li.tweet .twitter-date {
 }
 .tab-content-bottom article {
   padding-bottom: 20px;
-  border-bottom: 1px solid #bababa;
   margin-bottom: 25px;
 }
+
+.carro-products{
+  border-bottom: 1px solid gray;
+}
+
+#productline{
+  padding-bottom: 20px;
+}
+
 .tab-content-bottom article figure {
   display: inline-block;
   width: 35%;
@@ -1839,7 +1875,6 @@ p.comment-form-author, p.comment-form-email, p.comment-form-url {
   .caret{
     display: none !important;
   }
-
   #menu-main_navigation > li > a{
     background-color: #008bfc !important;
     color: white !important;
@@ -1856,6 +1891,11 @@ p.comment-form-author, p.comment-form-email, p.comment-form-url {
   #menu-main_navigation .sub-menu > li > a{
     border-bottom: 1px dotted #ddd;
   }
+  
+  #menu-main_navigation .sub-menu > li:last-child > a{
+    border-bottom: none;
+  }
+  
 }
 
 @media only screen and (max-width: 600px) {
@@ -2094,9 +2134,14 @@ header .box-description .cta a span {
 .whois_internet .who_internet_content p {
 }
 .diy_content {
-  margin-top: 30px;
-  padding: 0px 20px 0px 20px;
+  /*margin-top: 30px;*/
+  padding: 30px 20px 0px 20px;
 }
+
+#expert{
+  padding-top: 20px;
+}
+
 .diy_content article {
   padding-bottom: 20px;
   border-bottom: 1px solid #bababa;
@@ -2248,18 +2293,20 @@ header .box-description .cta a span {
   overflow: hidden;
 }
 .tab-content .carrousel .product {
-  width: 50%;
+  width: 33%;
   float: left;
+  padding: 5px;
   overflow: hidden;
 }
 .tab-content .carrousel .product .product_detail {
-  float: left;
   overflow: hidden;
-  width: 50%;
+  width: 100%;
 }
 .tab-content .carrousel .product figure {
-  width: 50%;
-  float: left;
+  width: 100%;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
 }
 .tab-content .carrousel .product figure img {
   width: 95%;

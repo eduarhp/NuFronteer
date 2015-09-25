@@ -4,6 +4,7 @@
 
 <article id="<?php the_ID(); ?>" class="single-post">
   <section class="detail-body">
+    <?php get_the_ID(); ?> 
     <?php the_content(); ?>
   </section>
 </article>

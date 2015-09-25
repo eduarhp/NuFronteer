@@ -89,9 +89,6 @@
 <!-- OPEN Body -->
 <body <?php body_class(); ?>>
 
-
-</div>
-
 <div id="MobileMenu" class="MobileMenu">
   <?php
 
@@ -140,7 +137,7 @@ if (is_front_page() || is_category() )
           </div>
           <a class="logo-nufronteer" href="<?php bloginfo('url'); ?>">NuFronteer</a>
         </div>
-        <div id="NavigationMain" class="NavigationMain container">
+        <div id="NavigationMain" class="NavigationMain">
           <?php
 
             $defaults = array(
@@ -172,24 +169,6 @@ if (is_front_page() || is_category() )
   <div class="row">
     <div class="col-md-8">
       <div class="box-marquees bg-grey-light">
-      
-        <!-- Navbar -->        
-        <!-- <nav class="navbar navbar-inverse navbar-static-top clearfix">
-          <div class="navbar-header bg-blue-light">           
-            <div class="center-button">
-              <button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".navmenu" data-canvas="body">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-            </div>
-            <a class="logo-nufronteer" href="<?php bloginfo('url'); ?>">NuFronteer</a>          
-          </div>
-          <div class="navbar-branding bg-blue-light">
-            <a class="logo-nufronteer" href="<?php bloginfo('url'); ?>">NuFronteer</a>
-          </div>
-        </nav>  -->
         
         <?php 
           if (of_get_option('homepage_video_picker') == 0) {
@@ -271,7 +250,6 @@ if (is_front_page() || is_category() )
     </div>    
   </div>
 </header>
-
 <?php } else { 
 ?>
 
@@ -288,7 +266,7 @@ if (is_front_page() || is_category() )
           </div>
           <a class="logo-nufronteer" href="<?php bloginfo('url'); ?>">NuFronteer</a>
         </div>
-        <div id="NavigationMain" class="NavigationMain container">
+        <div id="NavigationMain" class="NavigationMain">
           <?php
 
 

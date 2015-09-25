@@ -678,11 +678,15 @@
 
 #menu-main_navigation .sub-menu > li > a{
 	display: block;
-	padding: 10px;
+	padding: 10px 10px 10px 20px;
 }
 
 #menu-main_navigation .sub-menu > li > a + ul > li {
 	background-color: #FFF;
+}
+
+#menu-main_navigation .sub-menu > li > a + ul > li a {
+  padding-left: 30px;
 }
 
 #menu-main_navigation > li:last-child, #menu-main_navigation .sub-menu > li:last-child{
